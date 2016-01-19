@@ -3214,27 +3214,58 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(6);
-	var tabs_1 = __webpack_require__(353);
+	var hello_ionic_1 = __webpack_require__(353);
+	var list_1 = __webpack_require__(354);
 	var MyApp = (function () {
-	    function MyApp(platform) {
-	        this.root = tabs_1.TabsPage;
-	        platform.ready().then(function () {
-	            // Do any necessary cordova or native calls here now that the platform is ready
-	        });
+	    function MyApp(app, platform) {
+	        // set up our app
+	        this.app = app;
+	        this.platform = platform;
+	        this.initializeApp();
+	        // set our app's pages
+	        this.pages = [
+	            { title: 'Hello Ionic', component: hello_ionic_1.HelloIonicPage },
+	            { title: 'My First List', component: list_1.ListPage }
+	        ];
+	        // make HelloIonicPage the root (or first) page
+	        this.rootPage = hello_ionic_1.HelloIonicPage;
 	    }
+	    MyApp.prototype.initializeApp = function () {
+	        this.platform.ready().then(function () {
+	            console.log('Platform ready');
+	            // The platform is now ready. Note: if this callback fails to fire, follow
+	            // the Troubleshooting guide for a number of possible solutions:
+	            //
+	            // Okay, so the platform is ready and our plugins are available.
+	            // Here you can do any higher level native things you might need.
+	            //
+	            // First, let's hide the keyboard accessory bar (only works natively) since
+	            // that's a better default:
+	            //
+	            //
+	            // For example, we might change the StatusBar color. This one below is
+	            // good for light backgrounds and dark text;
+	            if (window.StatusBar) {
+	                window.StatusBar.styleDefault();
+	            }
+	        });
+	    };
+	    MyApp.prototype.openPage = function (page) {
+	        // close the menu when clicking a link from the menu
+	        this.app.getComponent('leftMenu').close();
+	        // navigate to the new page if it is not the current page
+	        var nav = this.app.getComponent('nav');
+	        nav.setRoot(page.component);
+	    };
 	    MyApp = __decorate([
 	        ionic_1.App({
-	            templateUrl: 'build/app.html',
-	            // Check out the config API docs for more info
-	            // http://ionicframework.com/docs/v2/api/config/Config/
-	            config: {}
+	            templateUrl: 'build/app.html'
 	        }), 
-	        __metadata('design:paramtypes', [(typeof (_a = typeof ionic_1.Platform !== 'undefined' && ionic_1.Platform) === 'function' && _a) || Object])
+	        __metadata('design:paramtypes', [(typeof (_a = typeof ionic_1.IonicApp !== 'undefined' && ionic_1.IonicApp) === 'function' && _a) || Object, (typeof (_b = typeof ionic_1.Platform !== 'undefined' && ionic_1.Platform) === 'function' && _b) || Object])
 	    ], MyApp);
 	    return MyApp;
-	    var _a;
+	    var _a, _b;
 	})();
-	exports.MyApp = MyApp;
 
 
 /***/ },
@@ -61328,26 +61359,20 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(6);
-	var page1_1 = __webpack_require__(354);
-	var page2_1 = __webpack_require__(355);
-	var page3_1 = __webpack_require__(356);
-	var TabsPage = (function () {
-	    function TabsPage() {
-	        // this tells the tabs component which Pages
-	        // should be each tab's root Page
-	        this.tab1Root = page1_1.Page1;
-	        this.tab2Root = page2_1.Page2;
-	        this.tab3Root = page3_1.Page3;
+	var HelloIonicPage = (function () {
+	    function HelloIonicPage(nav) {
+	        this.nav = nav;
 	    }
-	    TabsPage = __decorate([
+	    HelloIonicPage = __decorate([
 	        ionic_1.Page({
-	            templateUrl: 'build/pages/tabs/tabs.html'
+	            templateUrl: 'build/pages/hello-ionic/hello-ionic.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], TabsPage);
-	    return TabsPage;
+	        __metadata('design:paramtypes', [(typeof (_a = typeof ionic_1.NavController !== 'undefined' && ionic_1.NavController) === 'function' && _a) || Object])
+	    ], HelloIonicPage);
+	    return HelloIonicPage;
+	    var _a;
 	})();
-	exports.TabsPage = TabsPage;
+	exports.HelloIonicPage = HelloIonicPage;
 
 
 /***/ },
@@ -61364,18 +61389,39 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(6);
-	var Page1 = (function () {
-	    function Page1() {
+	var item_details_1 = __webpack_require__(355);
+	var ListPage = (function () {
+	    function ListPage(app, nav, navParams) {
+	        this.nav = nav;
+	        // If we navigated to this page, we will have an item available as a nav param
+	        this.selectedItem = navParams.get('item');
+	        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
+	            'american-football', 'boat', 'bluetooth', 'build'];
+	        this.items = [];
+	        for (var i = 1; i < 11; i++) {
+	            this.items.push({
+	                title: 'Item ' + i,
+	                note: 'This is item #' + i,
+	                icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+	            });
+	        }
 	    }
-	    Page1 = __decorate([
+	    ListPage.prototype.itemTapped = function (event, item) {
+	        console.log('You selected:', item.title);
+	        this.nav.push(item_details_1.ItemDetailsPage, {
+	            item: item
+	        });
+	    };
+	    ListPage = __decorate([
 	        ionic_1.Page({
-	            templateUrl: 'build/pages/page1/page1.html',
+	            templateUrl: 'build/pages/list/list.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], Page1);
-	    return Page1;
+	        __metadata('design:paramtypes', [(typeof (_a = typeof ionic_1.IonicApp !== 'undefined' && ionic_1.IonicApp) === 'function' && _a) || Object, (typeof (_b = typeof ionic_1.NavController !== 'undefined' && ionic_1.NavController) === 'function' && _b) || Object, (typeof (_c = typeof ionic_1.NavParams !== 'undefined' && ionic_1.NavParams) === 'function' && _c) || Object])
+	    ], ListPage);
+	    return ListPage;
+	    var _a, _b, _c;
 	})();
-	exports.Page1 = Page1;
+	exports.ListPage = ListPage;
 
 
 /***/ },
@@ -61392,46 +61438,22 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var ionic_1 = __webpack_require__(6);
-	var Page2 = (function () {
-	    function Page2() {
+	var ItemDetailsPage = (function () {
+	    function ItemDetailsPage(app, nav, navParams) {
+	        this.nav = nav;
+	        // If we navigated to this page, we will have an item available as a nav param
+	        this.selectedItem = navParams.get('item');
 	    }
-	    Page2 = __decorate([
+	    ItemDetailsPage = __decorate([
 	        ionic_1.Page({
-	            templateUrl: 'build/pages/page2/page2.html',
+	            templateUrl: 'build/pages/item-details/item-details.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], Page2);
-	    return Page2;
+	        __metadata('design:paramtypes', [(typeof (_a = typeof ionic_1.IonicApp !== 'undefined' && ionic_1.IonicApp) === 'function' && _a) || Object, (typeof (_b = typeof ionic_1.NavController !== 'undefined' && ionic_1.NavController) === 'function' && _b) || Object, (typeof (_c = typeof ionic_1.NavParams !== 'undefined' && ionic_1.NavParams) === 'function' && _c) || Object])
+	    ], ItemDetailsPage);
+	    return ItemDetailsPage;
+	    var _a, _b, _c;
 	})();
-	exports.Page2 = Page2;
-
-
-/***/ },
-/* 356 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var ionic_1 = __webpack_require__(6);
-	var Page3 = (function () {
-	    function Page3() {
-	    }
-	    Page3 = __decorate([
-	        ionic_1.Page({
-	            templateUrl: 'build/pages/page3/page3.html'
-	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], Page3);
-	    return Page3;
-	})();
-	exports.Page3 = Page3;
+	exports.ItemDetailsPage = ItemDetailsPage;
 
 
 /***/ }

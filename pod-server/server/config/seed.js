@@ -5,13 +5,13 @@
 
 'use strict';
 // Insert seed models below
-var Thing = require('../api/thing/thing.model');
+var Delivery = require('../api/delivery/delivery.model');
 var User = require('../api/user/user.model');
 
 // Insert seed data below
-var thingSeed = require('../api/thing/thing.seed.json');
+var deliverySeed = require('../api/delivery/delivery.seed.json');
 
 // Insert seed inserts below
-Thing.find({}).remove(function() {
-  Thing.create(thingSeed);
+Delivery.find({}).remove(function() {
+  Delivery.create(deliverySeed);
 });
